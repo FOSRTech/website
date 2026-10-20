@@ -1,0 +1,19 @@
+---
+import type { Model } from "../data/models";
+
+interface Props {
+    model: Model;
+}
+
+const { model } = Astro.props;
+---
+
+<img
+    class="model-art"
+    src={model.image}
+    width="1024"
+    height="1536"
+    alt=""
+    decoding="async"
+    style={`object-position:${model.artPosition}`}
+/>

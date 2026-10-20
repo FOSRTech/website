@@ -1,0 +1,957 @@
+:root {
+	--paper: #f7f5ef;
+	--ink: #101211;
+	--muted: #555a56;
+	--card: #f0efe9;
+	--chip: #e4e2da;
+	--rule: #dedbd1;
+	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+	--font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	--font-mono: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	-webkit-tap-highlight-color: transparent;
+	background: var(--paper);
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-sans);
+	font-size: 16px;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: clip;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+	margin: 0;
+}
+
+ul,
+ol {
+	padding: 0;
+	list-style: none;
+}
+
+a {
+	color: inherit;
+}
+
+button {
+	font: inherit;
+}
+
+:focus-visible {
+	outline: 2px solid var(--ink);
+	outline-offset: 3px;
+}
+
+.container {
+	max-width: 1240px;
+	margin-inline: auto;
+	padding-inline: clamp(20px, 5vw, 64px);
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.mono {
+	font-family: var(--font-mono);
+}
+
+/* Header */
+
+.site-header {
+	padding-block: 22px;
+}
+
+.site-header__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+}
+
+/* The black SVG logo reads directly on the cream page, so it needs no backing tile */
+.brand__logo {
+	height: 30px;
+	width: auto;
+}
+
+.site-nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 28px;
+}
+
+.site-nav a {
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.site-nav a:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.nav-toggle {
+	display: none;
+	padding: 8px 14px;
+	border: 1px solid var(--ink);
+	border-radius: 999px;
+	background: transparent;
+	color: var(--ink);
+	font-size: 14px;
+	cursor: pointer;
+}
+
+@media (max-width: 719.98px) {
+	.site-header__inner {
+		flex-wrap: wrap;
+	}
+
+	.js .nav-toggle {
+		display: inline-flex;
+	}
+
+	.js .site-nav {
+		display: none;
+	}
+
+	.js .site-nav.is-open {
+		display: block;
+		order: 3;
+		width: 100%;
+		padding-top: 12px;
+	}
+
+	.js .site-nav.is-open ul {
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.site-nav ul {
+		gap: 18px;
+	}
+}
+
+/* Hero */
+
+.hero {
+	padding-block: clamp(40px, 8vh, 96px) clamp(40px, 6vh, 64px);
+}
+
+
+.hero__inner {
+	padding-left: clamp(20px, 5vw, 64px);
+}
+
+.hero__title {
+	font-size: clamp(2.6rem, 7vw, 7rem);
+	font-weight: 700;
+	line-height: 0.92;
+	letter-spacing: -0.04em;
+}
+
+.hero__title .line {
+	display: block;
+	width: max-content;
+	max-width: 100%;
+}
+
+.slogan {
+	display: grid;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	letter-spacing: inherit;
+	line-height: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.slogan:focus-visible {
+	outline-offset: 8px;
+}
+
+.slogan__layer {
+	grid-area: 1 / 1;
+	transition:
+		opacity 240ms var(--ease-out),
+		transform 240ms var(--ease-out),
+		visibility 240ms;
+}
+
+.slogan__layer--alt {
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(0.12em);
+}
+
+.slogan[aria-pressed='true'] .slogan__layer--default {
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-0.12em);
+}
+
+.slogan[aria-pressed='true'] .slogan__layer--alt {
+	opacity: 1;
+	visibility: visible;
+	transform: none;
+}
+
+/* Grain: each line has its own alpha mask generated from its glyph shapes. The ink is painted through the mask only after the mask loads (.is-grained), so a failed load leaves solid text. */
+.slogan-grain {
+	position: relative;
+	display: inline-block;
+	white-space: nowrap;
+	padding: 0.1em 0.04em 0.2em;
+	margin: -0.1em -0.04em -0.2em;
+}
+
+.slogan-grain.is-grained {
+	color: transparent;
+}
+
+.slogan-grain.is-grained::before {
+	content: '';
+	position: absolute;
+	left: var(--grain-x);
+	top: var(--grain-y);
+	width: var(--grain-w);
+	height: var(--grain-h);
+	background: var(--ink);
+	-webkit-mask: var(--grain-mask) 0 0 / 100% 100% no-repeat;
+	mask: var(--grain-mask) 0 0 / 100% 100% no-repeat;
+	pointer-events: none;
+}
+
+.hero__sub {
+	margin-top: 28px;
+	font-family: var(--font-mono);
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--ink);
+}
+
+@media (min-width: 900px) {
+	.hero__inner {
+		padding-left: 11%;
+	}
+}
+
+/* Showcase */
+
+.showcase {
+	--card-w: clamp(300px, 31vw, 420px);
+	--card-overlap: 0.11;
+	padding-bottom: 0;
+}
+
+.showcase-scroll {
+	overflow-x: auto;
+	overflow-y: hidden;
+	overscroll-behavior-x: contain;
+	-webkit-overflow-scrolling: touch;
+	padding-block: 36px 64px;
+}
+
+/* Chrome ignores ::-webkit-scrollbar when scrollbar-width is set, so the two are kept apart */
+@supports not selector(::-webkit-scrollbar) {
+	.showcase-scroll {
+		scrollbar-width: thin;
+		scrollbar-color: var(--rule) transparent;
+	}
+}
+
+@supports selector(::-webkit-scrollbar) {
+	.showcase-scroll::-webkit-scrollbar {
+		height: 8px;
+	}
+
+	.showcase-scroll::-webkit-scrollbar-track {
+		background: var(--rule);
+		border-radius: 999px;
+	}
+
+	.showcase-scroll::-webkit-scrollbar-thumb {
+		background: var(--muted);
+		border-radius: 999px;
+	}
+}
+
+/* Desktop depth: each card gets a slight Y-rotation and a small Z offset, so the overlaps read as separate objects */
+@media (min-width: 900px) {
+	.showcase-item:nth-child(1) {
+		--ry: 3deg;
+		--z: 0px;
+	}
+
+	.showcase-item:nth-child(2) {
+		--ry: -3.5deg;
+		--z: 10px;
+	}
+
+	.showcase-item:nth-child(3) {
+		--ry: 3deg;
+		--z: 4px;
+	}
+
+	.showcase-item:nth-child(4) {
+		--ry: -4deg;
+		--z: 16px;
+	}
+
+	.showcase-item:nth-child(5) {
+		--ry: 2.5deg;
+		--z: 8px;
+	}
+
+	.showcase-item:nth-child(6) {
+		--ry: -3deg;
+		--z: 22px;
+	}
+}
+
+.showcase-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	width: max-content;
+	padding-inline: clamp(20px, 5vw, 64px);
+}
+
+.showcase-item {
+	flex: none;
+	width: var(--card-w);
+	margin-top: var(--dy, 0);
+}
+
+
+.showcase-item + .showcase-item {
+	margin-left: calc(var(--card-w) * var(--card-overlap) * -1);
+}
+
+.model-card {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 2 / 3;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border-radius: 14px;
+	padding: 22px;
+	transform: perspective(1400px) rotateY(var(--ry, 0deg)) translateZ(var(--z, 0px)) rotate(var(--rot, 0deg));
+	transform-origin: 50% 40%;
+	/* The left-edge shadow separates each card from the one behind it and grows with its depth; the hairline keeps the edge legible on dark artwork */
+	box-shadow:
+		inset 0 0 0 1px rgb(255 255 255 / 0.06),
+		calc(-10px - var(--z, 0px) * 0.6) 0 calc(20px + var(--z, 0px)) -12px rgb(16 18 17 / 0.4),
+		0 34px 50px -28px rgb(16 18 17 / 0.5);
+	isolation: isolate;
+}
+
+.model-art {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	z-index: 0;
+	object-fit: cover;
+	pointer-events: none;
+}
+
+/* Legibility scrim: darkens only the top label zone and the caption zone */
+.model-card::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(
+		to bottom,
+		rgb(8 8 7 / 0.62) 0%,
+		rgb(8 8 7 / 0.22) 22%,
+		rgb(8 8 7 / 0) 38%,
+		rgb(8 8 7 / 0) 58%,
+		rgb(8 8 7 / 0.7) 100%
+	);
+	pointer-events: none;
+}
+
+.model-card__tag {
+	position: absolute;
+	top: 18px;
+	left: 22px;
+	padding: 5px 9px;
+	border-radius: 999px;
+	z-index: 2;
+	background: rgb(8 8 7 / 0.45);
+	font-family: var(--font-mono);
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.model-card__text {
+	position: relative;
+	z-index: 2;
+	margin-top: 46px;
+}
+
+/* Soft local backing behind the name and description only, so the artwork outside the text block is not darkened */
+.model-card__text::before {
+	content: '';
+	position: absolute;
+	inset: -20px -26px -16px -26px;
+	z-index: -1;
+	background: rgb(8 8 7 / 0.72);
+	filter: blur(14px);
+	pointer-events: none;
+}
+
+.model-card__name {
+	font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
+}
+
+.model-card__desc {
+	text-shadow: 0 1px 14px rgb(8 8 7 / 0.5);
+	margin-top: 8px;
+	max-width: 16ch;
+	font-size: 14px;
+	line-height: 1.35;
+	opacity: 0.85;
+}
+
+.model-card__caption {
+	position: absolute;
+	left: 22px;
+	bottom: 22px;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	font-family: var(--font-mono);
+	font-size: 11px;
+	line-height: 1.5;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	opacity: 0.9;
+}
+
+.model-card[data-model='dum-e'] {
+	background: #1b1a17;
+	color: #f3efe4;
+}
+
+.model-card[data-model='edith'] {
+	background: #8a5c58;
+	color: #f7f0ea;
+}
+
+.model-card[data-model='jarvis'] {
+	background: #0f3c3b;
+	color: #e8f1ee;
+}
+
+.model-card[data-model='vision'] {
+	background: #5a4560;
+	color: #f5eef2;
+}
+
+.model-card[data-model='aida'] {
+	background: #2a1316;
+	color: #f6e6e8;
+}
+
+.model-card[data-model='ultron'] {
+	background: #0e0d0d;
+	color: #f2e9e6;
+}
+
+/* Intro */
+
+.intro {
+	padding-top: clamp(72px, 10vw, 120px);
+}
+
+.intro__title {
+	font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+	font-weight: 700;
+	line-height: 1.02;
+	letter-spacing: -0.03em;
+}
+
+.intro__text {
+	max-width: 46ch;
+	margin-top: 28px;
+	font-family: var(--font-mono);
+	font-size: 15px;
+	line-height: 1.7;
+	color: var(--ink);
+}
+
+@media (min-width: 900px) {
+	.intro {
+		padding-left: 11%;
+	}
+}
+
+/* Cards */
+
+.block {
+	padding-top: clamp(56px, 8vw, 96px);
+}
+
+.work-grid,
+.catalog-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.work-card,
+.catalog-card {
+	height: 100%;
+	border-radius: 20px;
+	background: var(--card);
+}
+
+.work-card {
+	padding: 28px 26px 30px;
+}
+
+.work-card__icon {
+	margin-bottom: 40px;
+}
+
+.work-card__title {
+	font-size: 20px;
+	font-weight: 650;
+	letter-spacing: -0.015em;
+}
+
+.work-card__desc {
+	margin-top: 10px;
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--muted);
+}
+
+.catalog-card {
+	padding: 22px 22px 24px;
+}
+
+.catalog-card__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.catalog-card__name {
+	font-size: 17px;
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	margin-right: 4px;
+}
+
+.catalog-card__desc {
+	margin-top: 12px;
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--muted);
+}
+
+.catalog-card--roadmap .catalog-card__name {
+	font-weight: 500;
+}
+
+.chip {
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-family: var(--font-mono);
+	font-size: 10px;
+	line-height: 1.2;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.chip--kind,
+.chip--status {
+	background: var(--chip);
+	color: var(--ink);
+}
+
+.chip--status {
+	margin-left: auto;
+}
+
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 18px;
+}
+
+.chip--tag {
+	background: var(--chip);
+	color: var(--muted);
+}
+
+/* Journal CTA */
+
+.cta__title {
+	font-size: clamp(1.8rem, 3vw, 2.4rem);
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	line-height: 1.1;
+}
+
+.cta__text {
+	max-width: 72ch;
+	margin-top: 18px;
+	font-family: var(--font-mono);
+	font-size: 14px;
+	line-height: 1.8;
+	color: var(--muted);
+}
+
+.cta__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 32px;
+}
+
+.button {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 14px 22px;
+	border: 1px solid var(--ink);
+	border-radius: 999px;
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 1;
+	text-decoration: none;
+	transition:
+		background-color 200ms var(--ease-out),
+		color 200ms var(--ease-out),
+		transform 160ms var(--ease-out);
+}
+
+.button:active {
+	transform: scale(0.97);
+}
+
+.button--primary {
+	background: var(--ink);
+	color: var(--paper);
+}
+
+.button--ghost {
+	background: transparent;
+	color: var(--ink);
+}
+
+.button--ghost:hover {
+	background: var(--chip);
+}
+
+/* Footer */
+
+.site-footer {
+	padding-bottom: 40px;
+}
+
+.site-footer > .container {
+	margin-top: 120px;
+	padding-top: 56px;
+	border-top: 1px solid var(--rule);
+}
+
+.site-footer__top {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 40px;
+}
+
+.site-footer__groups {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, auto));
+	gap: 48px;
+}
+
+.site-footer__title {
+	margin-bottom: 14px;
+	font-family: var(--font-mono);
+	font-size: 10px;
+	font-weight: 400;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.site-footer ul {
+	display: grid;
+	gap: 4px;
+	font-size: 14px;
+	line-height: 1.8;
+}
+
+.site-footer a {
+	text-decoration: none;
+}
+
+.site-footer a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.site-footer__muted {
+	color: var(--muted);
+}
+
+.site-footer__bottom {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 56px;
+	font-size: 13px;
+	color: var(--muted);
+}
+
+.site-footer__motto {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	letter-spacing: 0.06em;
+}
+
+/* Responsive */
+
+@media (max-width: 899.98px) {
+	.showcase {
+		--card-w: min(72vw, 360px);
+		--card-overlap: 0.08;
+	}
+
+	.work-grid,
+	.catalog-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.site-footer__groups {
+		grid-template-columns: repeat(2, minmax(0, auto));
+	}
+}
+
+@media (max-width: 639.98px) {
+	.hero__title {
+		font-size: clamp(1.9rem, 9.4vw, 4rem);
+	}
+
+	.showcase {
+		--card-w: min(82vw, 340px);
+		--card-overlap: 0.05;
+	}
+
+	.work-grid,
+	.catalog-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Pointer-only motion: hover lifts and parallax never run on touch or reduced motion */
+
+@media (hover: hover) and (pointer: fine) {
+	.work-card,
+	.catalog-card {
+		transition: transform 280ms var(--ease-out);
+	}
+
+	.work-card:hover,
+	.catalog-card:hover {
+		transform: translateY(-4px);
+	}
+
+	.model-card {
+		transition:
+			transform 260ms var(--ease-out),
+			box-shadow 260ms var(--ease-out);
+	}
+
+	.model-card:hover {
+		box-shadow:
+			inset 0 0 0 1px rgb(255 255 255 / 0.08),
+			calc(-16px - var(--z, 0px) * 0.6) 0 calc(28px + var(--z, 0px)) -12px rgb(16 18 17 / 0.42),
+			0 44px 60px -30px rgb(16 18 17 / 0.55);
+	}
+}
+
+/* The lift is movement, so it is skipped for reduced motion; the shadow change alone still marks the hovered card */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+	.model-card:hover {
+		transform: perspective(1400px) rotateY(var(--ry, 0deg)) translateZ(calc(var(--z, 0px) + 24px)) translateY(-8px) rotate(var(--rot, 0deg));
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.hero__title:hover .slogan__layer--default {
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-0.12em);
+	}
+
+	.hero__title:hover .slogan__layer--alt {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+}
+
+/* Entrance motion: CSS-only and skipped entirely for reduced motion */
+
+@media (prefers-reduced-motion: no-preference) {
+	.hero__title .line {
+		animation: line-in 650ms var(--ease-out) both;
+	}
+
+	.hero__title .line + .line {
+		animation-delay: 120ms;
+	}
+
+	.hero__sub {
+		animation: fade-up 600ms var(--ease-out) 260ms both;
+	}
+
+	.showcase-item {
+		animation: card-in 720ms var(--ease-out) both;
+	}
+
+	.showcase-item:nth-child(2) {
+		animation-delay: 70ms;
+	}
+
+	.showcase-item:nth-child(3) {
+		animation-delay: 140ms;
+	}
+
+	.showcase-item:nth-child(4) {
+		animation-delay: 210ms;
+	}
+
+	.showcase-item:nth-child(5) {
+		animation-delay: 280ms;
+	}
+
+	html.motion [data-reveal] {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+
+	html.motion [data-reveal].is-visible {
+		opacity: 1;
+		transform: none;
+		transition:
+			opacity 520ms var(--ease-out),
+			transform 560ms var(--ease-out);
+	}
+}
+
+@keyframes line-in {
+	from {
+		opacity: 0;
+		transform: translateY(0.28em);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes card-in {
+	from {
+		opacity: 0;
+		transform: translateY(28px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+
+}

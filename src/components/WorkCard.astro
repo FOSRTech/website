@@ -1,0 +1,54 @@
+---
+import { workCategories } from '../data/site';
+
+interface Props {
+	id: (typeof workCategories)[number]['id'];
+	title: string;
+	description: string;
+	icon: (typeof workCategories)[number]['icon'];
+}
+
+const { id, title, description, icon } = Astro.props;
+---
+
+<article class="work-card" id={id}>
+	<svg
+		class="work-card__icon"
+		viewBox="0 0 24 24"
+		width="28"
+		height="28"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="1.6"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		aria-hidden="true"
+		focusable="false"
+	>
+		{
+			icon === 'cube' && (
+				<>
+					<path d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7z" />
+					<path d="M3.5 7 12 11.5 20.5 7M12 11.5v10" />
+				</>
+			)
+		}
+		{
+			icon === 'lock' && (
+				<>
+					<rect x="4.5" y="10.5" width="15" height="10.5" rx="2" />
+					<path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+				</>
+			)
+		}
+		{
+			icon === 'code' && (
+				<>
+					<path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15" />
+				</>
+			)
+		}
+	</svg>
+	<h3 class="work-card__title">{title}</h3>
+	<p class="work-card__desc">{description}</p>
+</article>

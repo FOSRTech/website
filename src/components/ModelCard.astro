@@ -1,0 +1,24 @@
+---
+import type { Model } from "../data/models";
+import ModelArt from "./ModelArt.astro";
+
+interface Props {
+    model: Model;
+}
+
+const { model } = Astro.props;
+---
+
+<article class="model-card" data-model={model.id}>
+    <ModelArt model={model} />
+    <span class="model-card__tag">{model.tag}</span>
+    <div class="model-card__text">
+        <h3 class="model-card__name">{model.name}</h3>
+        <p class="model-card__desc">{model.showcaseDescription}</p>
+    </div>
+    <p class="model-card__caption">
+        {model.caption.map((line) => (
+            <span>{line}</span>
+        ))}
+    </p>
+</article>

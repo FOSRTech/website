@@ -1,0 +1,45 @@
+---
+import { footerGroups } from "../data/site";
+---
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="site-footer__top">
+            <a class="brand" href="/" aria-label="FOSR Tech home">
+                <img
+                    class="brand__logo"
+                    src="/fosrtechLogo.svg"
+                    width="785"
+                    height="163"
+                    alt=""
+                />
+            </a>
+            <div class="site-footer__groups">
+                {footerGroups.map((group) => (
+                    <nav aria-label={group.title}>
+                        <h2 class="site-footer__title">{group.title}</h2>
+                        <ul>
+                            {group.links.map((link) => (
+                                <li>
+                                    {link.href ? (
+                                        <a href={link.href}>{link.label}</a>
+                                    ) : (
+                                        <span class="site-footer__muted">
+                                            {link.label}
+                                        </span>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                ))}
+            </div>
+        </div>
+        <div class="site-footer__bottom">
+            <p>© 2026 FOSR Tech. All rights reserved.</p>
+            <p class="site-footer__motto">
+                BUILD / RESEARCH / SHARE / FOR A MORE CAPABLE FUTURE.
+            </p>
+        </div>
+    </div>
+</footer>

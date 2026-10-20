@@ -1,11 +1,212 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import ModelCard from "../components/ModelCard.astro";
+import WorkCard from "../components/WorkCard.astro";
+import Layout from "../layouts/Layout.astro";
+import { site, workCategories } from "../data/site";
+import { models, roadmapItem } from "../data/models";
 ---
 
 <Layout>
-	<Welcome />
+    <Header />
+    <main id="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="container hero__inner">
+                <h1 id="hero-title" class="hero__title">
+                    <button
+                        type="button"
+                        class="slogan"
+                        aria-pressed="false"
+                        data-slogan
+                    >
+                        <span class="slogan__layer slogan__layer--default">
+                            <span class="line">
+                                <span
+                                    class="slogan-grain"
+                                    style="--grain-mask:url(/images/grain/fully-open.png);--grain-x:-0.3em;--grain-y:-0.3em;--grain-w:5.1029em;--grain-h:1.8198em"
+                                >
+                                    Fully Open
+                                </span>
+                            </span>
+                            <span class="line">
+                                <span
+                                    class="slogan-grain"
+                                    style="--grain-mask:url(/images/grain/source-research.png);--grain-x:-0.3em;--grain-y:-0.3em;--grain-w:7.7886em;--grain-h:1.8198em"
+                                >
+                                    Source Research
+                                </span>
+                            </span>
+                        </span>
+                        <span class="slogan__layer slogan__layer--alt">
+                            <span class="line">
+                                <span
+                                    class="slogan-grain"
+                                    style="--grain-mask:url(/images/grain/forehead-of.png);--grain-x:-0.3em;--grain-y:-0.3em;--grain-w:5.6575em;--grain-h:1.8198em"
+                                >
+                                    Forehead of
+                                </span>
+                            </span>
+                            <span class="line">
+                                <span
+                                    class="slogan-grain"
+                                    style="--grain-mask:url(/images/grain/security-research.png);--grain-x:-0.3em;--grain-y:-0.3em;--grain-w:8.2882em;--grain-h:1.8198em"
+                                >
+                                    Security Research
+                                </span>
+                            </span>
+                        </span>
+                    </button>
+                </h1>
+                <p class="hero__sub">
+                    Indian-built intelligence for work that matters.
+                </p>
+            </div>
+        </section>
+
+        <section id="models" class="showcase" aria-labelledby="models-title">
+            <h2 id="models-title" class="sr-only">
+                Models
+            </h2>
+            <div
+                class="showcase-scroll"
+                role="region"
+                aria-label="Model showcase"
+                tabindex="0"
+            >
+                <ol class="showcase-row">
+                    {models.map((model) => (
+                        <li
+                            class="showcase-item"
+                            style={`--rot:${model.rotation}deg;--dy:${model.offset}`}
+                        >
+                            <ModelCard model={model} />
+                        </li>
+                    ))}
+                </ol>
+            </div>
+        </section>
+
+        <section id="about" class="intro container">
+            <h2 class="intro__title">
+                Intelligence,
+                <br />
+                built for the work.
+            </h2>
+            <p class="intro__text">
+                FOSR Tech is an independent engineering lab exploring useful AI,
+                open-source software, and security research.
+            </p>
+        </section>
+
+        <section
+            id="research"
+            class="container block"
+            aria-labelledby="research-title"
+        >
+            <h2 id="research-title" class="sr-only">
+                Research areas
+            </h2>
+            <ul class="work-grid">
+                {workCategories.map((category) => (
+                    <li data-reveal>
+                        <WorkCard
+                            id={category.id}
+                            title={category.title}
+                            description={category.description}
+                            icon={category.icon}
+                        />
+                    </li>
+                ))}
+            </ul>
+        </section>
+
+        <section
+            id="catalog"
+            class="container block"
+            aria-labelledby="catalog-title"
+        >
+            <h2 id="catalog-title" class="sr-only">
+                Model catalog
+            </h2>
+            <ul class="catalog-grid">
+                {models.map((model) => (
+                    <li
+                        class="catalog-item"
+                        id={`model-${model.id}`}
+                        data-reveal
+                    >
+                        <article class="catalog-card" data-model={model.id}>
+                            <header class="catalog-card__head">
+                                <h3 class="catalog-card__name">{model.name}</h3>
+                                <span class="chip chip--kind">Model</span>
+                                <span class="chip chip--status">
+                                    {model.status}
+                                </span>
+                            </header>
+                            <p class="catalog-card__desc">
+                                {model.catalogDescription}
+                            </p>
+                            <ul class="chips" aria-label="Tags">
+                                {model.tags.map((tag) => (
+                                    <li class="chip chip--tag">{tag}</li>
+                                ))}
+                            </ul>
+                        </article>
+                    </li>
+                ))}
+                <li class="catalog-item" data-reveal>
+                    <article class="catalog-card catalog-card--roadmap">
+                        <header class="catalog-card__head">
+                            <h3 class="catalog-card__name">
+                                {roadmapItem.name}
+                            </h3>
+                            <span class="chip chip--status">
+                                {roadmapItem.status}
+                            </span>
+                        </header>
+                        <p class="catalog-card__desc">
+                            {roadmapItem.catalogDescription}
+                        </p>
+                        <ul class="chips" aria-label="Tags">
+                            {roadmapItem.tags.map((tag) => (
+                                <li class="chip chip--tag">{tag}</li>
+                            ))}
+                        </ul>
+                    </article>
+                </li>
+            </ul>
+        </section>
+
+        <section
+            id="journal"
+            class="container block cta"
+            aria-labelledby="journal-title"
+        >
+            <h2 id="journal-title" class="cta__title">
+                Built in the open.
+            </h2>
+            <p class="cta__text">
+                Technical notes, experiments, and research write-ups. From AI
+                models to iOS security research, everything we build is public.
+            </p>
+            <div class="cta__actions">
+                <a class="button button--primary" href="#research">
+                    Explore research <span aria-hidden="true">→</span>
+                </a>
+                <a
+                    class="button button--ghost"
+                    href={site.githubUrl}
+                    target="_blank"
+                    rel="noopener"
+                >
+                    GitHub organization <span aria-hidden="true">↗</span>
+                </a>
+                <a class="button button--ghost" href="#journal">
+                    Read the journal <span aria-hidden="true">→</span>
+                </a>
+            </div>
+        </section>
+    </main>
+    <Footer />
 </Layout>
